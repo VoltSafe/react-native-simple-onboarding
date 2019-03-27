@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, ScrollView, Dimensions, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Animated, View, ScrollView, Dimensions } from 'react-native';
 import tinycolor from 'tinycolor2';
+import LottieView from 'lottie-react-native';
 
 import PageData from './components/PageData';
 import Paginator from './components/Paginator';
+
+const { width, height } = Dimensions.get('window');
 
 export default class Onboarding extends Component {
   constructor() {
@@ -12,7 +15,13 @@ export default class Onboarding extends Component {
 
     this.state = {
       currentPage: 0,
+      lottiePage: 0,
+      curFrame: new Animated.Value(0)
     };
+  }
+
+  componentDidMount = () => {
+    this.animation && this.animation.play(0, this.props.lottie.keyframes[0])
   }
 
   updatePosition = (event) => {
@@ -23,12 +32,30 @@ export default class Onboarding extends Component {
     if (isLastPage && pageFraction - page > 0.3) {
       this.props.onEnd();
     } else {
-      this.setState({ currentPage: page });
+      this.setState({ currentPage: page })
     }
+    
+    if (!this.animation)
+      return
+      
+    const lottiePage = Math.floor(pageFraction)
+    let curFrame
+    if (pageFraction < this.state.lottiePage) {
+      // If swiping backwards, show reverse animation controllable by swipe
+      curFrame = (pageFraction % 1) *
+        (this.props.lottie.keyframes[lottiePage+1] - this.props.lottie.keyframes[lottiePage]) 
+        + this.props.lottie.keyframes[lottiePage]
+    }
+    else {
+      curFrame = this.props.lottie.keyframes[this.state.lottiePage]
+      if (lottiePage > this.state.lottiePage) {
+        this.onScrollEnd(lottiePage)
+      }
+    }
+    this.setState({curFrame: Math.round(curFrame)})
   };
 
   goNext = () => {
-    const { width } = Dimensions.get('window');
     const { currentPage } = this.state;
     const nextPage = currentPage + 1;
     const offsetX = nextPage * width;
@@ -40,34 +67,54 @@ export default class Onboarding extends Component {
     });
   };
 
+  onScrollEnd = (nextPage) => {
+    if (this.state.lottiePage < nextPage) {
+      this.animation.play(this.props.lottie.keyframes[this.state.lottiePage], this.props.lottie.keyframes[nextPage])
+    }
+    this.setState({
+      lottiePage: nextPage,
+    })
+  }
+
   render() {
-    const { width, height } = Dimensions.get('window');
-    const { pages, bottomOverlay, showSkip, showNext, showDone } = this.props;
+    const { pages, bottomOverlay, showSkip, showNext, showDone, lottie } = this.props;
     const currentPage = pages[this.state.currentPage] || pages[0];
     const { backgroundColor } = currentPage;
     const isLight = tinycolor(backgroundColor).getBrightness() > 180;
 
     return (
-      <View style={{ flex: 1, backgroundColor: backgroundColor, justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: backgroundColor}}>
+        {!!lottie && <LottieView
+          source={lottie.anim}
+          ref={animation => {
+            this.animation = animation;
+          }}
+          progress={this.state.curFrame/lottie.totalFrames}
+          loop={false}
+          style={styles.lottie}
+        />}
         <ScrollView
+          style={styles.scrollview}
           ref="scroll"
           pagingEnabled={true}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
+          snapToAlignment={"center"}
           onScroll={this.updatePosition}
-          scrollEventThrottle={100}
+          scrollEventThrottle={1}
+          onMomentumScrollEnd={e => this.animation && this.onScrollEnd(Math.round(e.nativeEvent.contentOffset.x/width))}
         >
           {pages.map(({ image, title, subtitle, titleStyles, subtitleStyles }, idx) => (
             <PageData
               key={idx}
               isLight={isLight}
-              image={image}
+              image={!!!lottie && image}
               title={title}
               subtitle={subtitle}
               titleStyles={titleStyles}
               subtitleStyles={subtitleStyles}
               width={width}
-              height={height}
+              height={!!lottie ? undefined : height}
             />
           ))}
         </ScrollView>
@@ -98,6 +145,7 @@ Onboarding.propTypes = {
   showSkip: PropTypes.bool,
   showNext: PropTypes.bool,
   showDone: PropTypes.bool,
+  lottie: PropTypes.object,
 };
 
 Onboarding.defaultProps = {
@@ -106,3 +154,15 @@ Onboarding.defaultProps = {
   showNext: true,
   showDone: true,
 };
+
+const styles = {
+  lottie: {
+    flex: 1,
+    alignSelf: 'center',
+    width: width*.7,
+    height: width*.7,
+  },
+  scrollview: {
+    flex: 1,
+  }
+}
