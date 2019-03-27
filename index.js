@@ -127,9 +127,7 @@ export default class Onboarding extends Component {
           pages={pages.length}
           currentPage={this.state.currentPage}
           onEnd={this.props.onEnd}
-          onNext={() => {
-            this.goNext()
-          }}
+          onNext={this.goNext}
         />
       </View>
     );
