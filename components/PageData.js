@@ -18,9 +18,9 @@ const PageContent = ({ children }) => (
 const PageData = ({ isLight, image, title, subtitle, titleStyles, subtitleStyles, ...rest }) => (
   <Page {...rest}>
     <PageContent>
-      <View style={styles.image}>
+      {!!image && <View style={styles.image}>
         {image}
-      </View>
+      </View>}
       <Text style={[styles.title, titleStyles, (isLight ? styles.titleLight : {}) ]}>
         {title}
       </Text>
