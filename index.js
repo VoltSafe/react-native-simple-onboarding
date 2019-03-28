@@ -8,6 +8,7 @@ import PageData from './components/PageData';
 import Paginator from './components/Paginator';
 
 const { width, height } = Dimensions.get('window');
+const SLIDER_EPSILON = 0.00005
 
 export default class Onboarding extends Component {
   constructor() {
@@ -38,7 +39,7 @@ export default class Onboarding extends Component {
     if (!this.animation)
       return
       
-    const lottiePage = Math.floor(pageFraction)
+    const lottiePage = Math.floor(pageFraction + SLIDER_EPSILON)
     let curFrame
     if (pageFraction < this.state.lottiePage) {
       // If swiping backwards, show reverse animation controllable by swipe
