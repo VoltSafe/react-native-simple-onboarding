@@ -40,12 +40,15 @@ export default class Onboarding extends Component {
       return
       
     const lottiePage = Math.floor(pageFraction + SLIDER_EPSILON)
-    let curFrame
-    if (pageFraction < this.state.lottiePage) {
+    let curFrame, startFrame
+    if (lottiePage < 0) {
+      curFrame = (this.props.lottie.keyframes[0] * (1 + pageFraction))
+    }
+    else if (pageFraction < this.state.lottiePage) {
+      
       // If swiping backwards, show reverse animation controllable by swipe
-      curFrame = (pageFraction % 1) *
-        (this.props.lottie.keyframes[lottiePage+1] - this.props.lottie.keyframes[lottiePage]) 
-        + this.props.lottie.keyframes[lottiePage]
+      curFrame = (Math.abs(pageFraction) % 1) *
+        (this.props.lottie.keyframes[lottiePage+1] - this.props.lottie.keyframes[lottiePage]) + this.props.lottie.keyframes[lottiePage]
     }
     else {
       curFrame = this.props.lottie.keyframes[this.state.lottiePage]
