@@ -105,7 +105,7 @@ export default class Onboarding extends Component {
           showsHorizontalScrollIndicator={false}
           snapToAlignment={"center"}
           onScroll={this.updatePosition}
-          scrollEventThrottle={1}
+          scrollEventThrottle={100}
           onMomentumScrollEnd={e => this.animation && this.onScrollEnd(Math.round(e.nativeEvent.contentOffset.x/width))}
         >
           {pages.map(({ image, title, subtitle, titleStyles, subtitleStyles }, idx) => (
