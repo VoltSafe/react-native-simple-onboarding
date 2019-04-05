@@ -47,10 +47,13 @@ Props:
 * `showSkip` (optional): a bool flag indicating whether the Skip button should be show. Defaults to `true`.
 * `showNext` (optional): a bool flag indicating whether the Next arrow button should be show. Defaults to `true`.
 * `showDone` (optional): a bool flag indicating whether the Done checkmark button should be show. Defaults to `true`.
+* `lottie` (optional, overrides images): a Lottie animation that animates when navigating pages. The object has fields:
+  * `anim` (required): the rendered animation json,
+  * `keyframes` (required): array of target keyframes that each page of the Onboarding should end on,
+  * `totalFrames` (required): total amount of frames in the animation.
 
 ## To Do
 
-* animations
 * accessibility
 
 ## License
