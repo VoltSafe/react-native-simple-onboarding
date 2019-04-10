@@ -163,8 +163,9 @@ const styles = {
   lottie: {
     flex: 1,
     alignSelf: 'center',
-    width: width*.7,
-    height: width*.7,
+    width: width*1.2,
+    height: width*1.2,
+    marginHorizontal: -width*.1,
   },
   scrollview: {
     flex: 1,
