@@ -1,6 +1,6 @@
 {
   "name": "react-native-simple-onboarding",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A simple onboarding component for React Native",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,9 @@
   "author": "Gosha Arinich",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/goshakkk/react-native-simple-onboarding/issues"
+    "url": "https://github.com/ashayas/react-native-simple-onboarding/issues"
   },
-  "homepage": "https://github.com/goshakkk/react-native-simple-onboarding#readme",
+  "homepage": "https://github.com/ashayas/react-native-simple-onboarding#readme",
   "dependencies": {
     "tinycolor2": "^1.4.1"
   }
