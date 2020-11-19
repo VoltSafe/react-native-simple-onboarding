@@ -13,9 +13,9 @@ Originally inspired by [AndroidOnboarder](https://github.com/chyrta/AndroidOnboa
 ```javascript
 <Onboarding
   pages={[
-    { backgroundColor: '#fff', image: <Square />, title: 'Simple Messenger UI', subtitle: 'Implemented in React Native' },
-    { backgroundColor: "#fe6e58", image: <Circle />, title: 'Welcome', subtitle: 'To Earth' },
-    { backgroundColor: "#999", image: <Square />, title: 'Also', subtitle: 'Mars is nice' },
+    { backgroundColor: '#fff', image: <Square />, title: 'Simple Messenger UI', subtitle: <Text>Implemented in React Native'</Text> },
+    { backgroundColor: "#fe6e58", image: <Circle />, title: 'Welcome', subtitle: <Text>To Earth'</Text> },
+    { backgroundColor: "#999", image: <Square />, title: 'Also', subtitle: <Text>Mars is nice'</Text> },
   ]}
   onEnd={}
 />
@@ -41,7 +41,7 @@ Props:
   * `backgroundColor` (required): a background color for the page
   * `image` (required): a component instance displayed at the top of the page
   * `title` (required): a string title
-  * `subtitle` (required): a string subtitle
+  * `subtitle` (required): a react component
 * `onEnd` (optional): a callback that is fired after the onboarding is complete
 * `bottomOverlay` (optional): a bool flag indicating whether the bottom bar overlay should be shown. Defaults to `true`.
 * `showSkip` (optional): a bool flag indicating whether the Skip button should be show. Defaults to `true`.
